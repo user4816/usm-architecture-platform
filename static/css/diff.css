@@ -1,0 +1,222 @@
+/* diff.css - 버전 비교 (Diff) 스타일 */
+
+/* ── 컨테이너 ─────────────────────────────────────── */
+.diff-container {
+    overflow-x: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin: 1rem 0;
+}
+
+/* ── 통계 바 ──────────────────────────────────────── */
+.diff-stats {
+    display: flex;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    background: #f8fafc;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.diff-stat-added {
+    color: #059669;
+}
+
+.diff-stat-removed {
+    color: #dc2626;
+}
+
+.diff-stat-changed {
+    color: #d97706;
+}
+
+/* ── Diff 테이블 ──────────────────────────────────── */
+.diff-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Consolas', 'D2Coding', monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    table-layout: fixed;
+}
+
+.diff-table thead th {
+    background: #1e3a5f;
+    color: white;
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    text-align: left;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.diff-line-num {
+    width: 40px;
+    min-width: 40px;
+    max-width: 40px;
+    color: #9ca3af;
+    text-align: right;
+    padding: 2px 6px;
+    user-select: none;
+    background: #f9fafb;
+    border-right: 1px solid #e5e7eb;
+    font-size: 11px;
+}
+
+.diff-content-header {
+    width: calc(50% - 40px);
+}
+
+.diff-content {
+    padding: 2px 8px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    overflow-wrap: break-word;
+}
+
+/* ── 줄 타입별 스타일 ─────────────────────────────── */
+.diff-equal td {
+    background: white;
+}
+
+.diff-changed .diff-old {
+    background: #fef2f2;
+    border-left: 3px solid #ef4444;
+}
+
+.diff-changed .diff-new {
+    background: #f0fdf4;
+    border-left: 3px solid #22c55e;
+}
+
+.diff-removed .diff-old {
+    background: #fef2f2;
+    border-left: 3px solid #ef4444;
+}
+
+.diff-removed .diff-empty {
+    background: #f9fafb;
+}
+
+.diff-added .diff-new {
+    background: #f0fdf4;
+    border-left: 3px solid #22c55e;
+}
+
+.diff-added .diff-empty {
+    background: #f9fafb;
+}
+
+/* ── Semantic Diff ────────────────────────────────── */
+.semantic-diff {
+    margin: 1rem 0;
+}
+
+.semantic-diff-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1e3a5f;
+    margin: 1rem 0 0.5rem;
+}
+
+.semantic-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.5rem 0;
+    font-size: 0.85rem;
+}
+
+.semantic-table th {
+    background: #1e3a5f;
+    color: white;
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.semantic-table td {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid #e5e7eb;
+    vertical-align: top;
+}
+
+.semantic-table .diff-added td {
+    background: #f0fdf4;
+}
+
+.semantic-table .diff-removed td {
+    background: #fef2f2;
+}
+
+.semantic-table .diff-changed td {
+    background: #fffbeb;
+}
+
+.semantic-table code {
+    background: #f1f5f9;
+    padding: 0.15rem 0.35rem;
+    border-radius: 3px;
+    font-family: 'Consolas', 'D2Coding', monospace;
+    font-size: 0.8em;
+    color: #c7254e;
+}
+
+.diff-no-changes {
+    text-align: center;
+    color: #9ca3af;
+    padding: 2rem;
+    font-style: italic;
+}
+
+.diff-separator {
+    border: none;
+    border-top: 2px solid #e5e7eb;
+    margin: 1.5rem 0;
+}
+
+/* ── PDF Diff Mode 마킹 ──────────────────────────── */
+.diff-mark-added {
+    border-left: 4px solid #22c55e;
+    padding-left: 0.75rem;
+    background: #f0fdf4;
+}
+
+.diff-mark-removed {
+    border-left: 4px solid #ef4444;
+    padding-left: 0.75rem;
+    background: #fef2f2;
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+.diff-mark-changed {
+    border-left: 4px solid #f59e0b;
+    padding-left: 0.75rem;
+    background: #fffbeb;
+}
+
+/* ── @media print용 Diff ──────────────────────────── */
+@media print {
+    .diff-mark-added {
+        border-left: 4px solid #059669 !important;
+        background: #f0fdf4 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .diff-mark-removed {
+        border-left: 4px solid #dc2626 !important;
+        background: #fef2f2 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .diff-mark-changed {
+        border-left: 4px solid #d97706 !important;
+        background: #fffbeb !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}

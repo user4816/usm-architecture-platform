@@ -1,0 +1,244 @@
+CM:
+  rest:
+    info:
+      title: "CM REST API"
+      version: "2.0"
+      description: "Configuration Management REST API v2 with pagination and sorting."
+    endpoints:
+      - path: "/api/v2/network-elements"
+        method: "GET"
+        summary: "List Network Elements (v2)"
+        description: "Returns a paginated, sortable list of all managed network elements."
+        parameters:
+          - name: "status"
+            in: "query"
+            type: "string"
+            required: false
+            description: "Status filter (active, inactive, maintenance, decommissioned)"
+          - name: "page"
+            in: "query"
+            type: "integer"
+            required: false
+            description: "Page number (default: 1)"
+          - name: "page_size"
+            in: "query"
+            type: "integer"
+            required: false
+            description: "Items per page (default: 50, max: 200)"
+          - name: "sort_by"
+            in: "query"
+            type: "string"
+            required: false
+            description: "Sort field (name, status, last_updated)"
+        responses:
+          200:
+            description: "Success"
+            schema: "NetworkElementListV2"
+          401:
+            description: "Authentication failed"
+          429:
+            description: "Rate limit exceeded"
+
+      - path: "/api/v2/network-elements/{ne_id}"
+        method: "GET"
+        summary: "Get Network Element Details"
+        description: "Returns detailed information for a specific network element."
+        parameters:
+          - name: "ne_id"
+            in: "path"
+            type: "string"
+            required: true
+            description: "Network element ID"
+        responses:
+          200:
+            description: "Success"
+            schema: "NetworkElementV2"
+          404:
+            description: "Element not found"
+
+  sftp:
+    info:
+      title: "CM SFTP Interface"
+      version: "1.1"
+      description: "SFTP file transfers for configuration management with enhanced security."
+    connection:
+      protocol: "SFTP"
+      port: 2222
+      authentication: "Public Key Only"
+      timeout_seconds: 60
+      max_retries: 5
+      encryption: "AES-256-GCM"
+    transfers:
+      - name: "Inventory Sync"
+        direction: "EMS → NMS"
+        source_path: "/export/inventory/"
+        destination_path: "/import/inventory/"
+        file_pattern: "INV_*.csv"
+        schedule: "Daily 02:00"
+        description: "Full network element inventory synchronization"
+        format: "CSV (UTF-8)"
+
+      - name: "SW Package Deploy"
+        direction: "NMS → EMS"
+        source_path: "/packages/sw/"
+        destination_path: "/import/sw/"
+        file_pattern: "*.pkg"
+        schedule: "On-demand"
+        description: "Network element software upgrade package delivery"
+        format: "Binary Package"
+
+      - name: "Config Backup"
+        direction: "EMS → NMS"
+        source_path: "/export/config/"
+        destination_path: "/backup/config/"
+        file_pattern: "CFG_*.tar.gz"
+        schedule: "Daily 03:00"
+        description: "Network element configuration file backup"
+        format: "TAR.GZ Archive"
+
+FM:
+  rest:
+    info:
+      title: "FM REST API"
+      version: "2.0"
+      description: "Fault Management REST API v2 with mandatory severity filtering."
+    endpoints:
+      - path: "/api/v2/alarms"
+        method: "GET"
+        summary: "List Alarms (v2)"
+        description: "Retrieves alarms with mandatory severity filtering and date range."
+        parameters:
+          - name: "severity"
+            in: "query"
+            type: "string"
+            required: true
+            description: "Severity filter (critical, major, minor, warning) - required"
+          - name: "from_date"
+            in: "query"
+            type: "string"
+            required: false
+            description: "Start date/time (ISO 8601 format)"
+          - name: "to_date"
+            in: "query"
+            type: "string"
+            required: false
+            description: "End date/time (ISO 8601 format)"
+        responses:
+          200:
+            description: "Success"
+            schema: "AlarmListV2"
+          400:
+            description: "Invalid request parameters"
+
+      - path: "/api/v2/alarms/{alarm_id}/acknowledge"
+        method: "POST"
+        summary: "Acknowledge Alarm"
+        description: "Acknowledges a specific alarm with priority assignment."
+        parameters:
+          - name: "alarm_id"
+            in: "path"
+            type: "string"
+            required: true
+            description: "Alarm ID"
+        request_body:
+          content_type: "application/json"
+          schema:
+            operator: "string (acknowledging operator)"
+            comment: "string (optional comment)"
+            priority: "string (priority: high, medium, low)"
+        responses:
+          200:
+            description: "Acknowledgement successful"
+          404:
+            description: "Alarm not found"
+
+  sftp:
+    info:
+      title: "FM SFTP Interface"
+      version: "1.0"
+      description: "SFTP file transfers for fault management log collection."
+    connection:
+      protocol: "SFTP"
+      port: 2222
+      authentication: "Public Key Only"
+      timeout_seconds: 60
+      max_retries: 5
+      encryption: "AES-256-GCM"
+    transfers:
+      - name: "Log Collection"
+        direction: "EMS → NMS"
+        source_path: "/export/logs/"
+        destination_path: "/import/logs/"
+        file_pattern: "LOG_*.log.gz"
+        schedule: "Every 1 hour"
+        description: "System log file collection (new in 26B)"
+        format: "Plain Text + GZIP"
+
+PM:
+  rest:
+    info:
+      title: "PM REST API"
+      version: "2.0"
+      description: "Performance Management REST API for system health monitoring."
+    endpoints:
+      - path: "/api/v2/health"
+        method: "GET"
+        summary: "System Health Check"
+        description: "Performs an EMS system health check."
+        parameters: []
+        responses:
+          200:
+            description: "Healthy"
+            schema: "HealthStatus"
+          503:
+            description: "Service unavailable"
+
+  sftp:
+    info:
+      title: "PM SFTP Interface"
+      version: "1.1"
+      description: "SFTP file transfers for performance management data with compression."
+    connection:
+      protocol: "SFTP"
+      port: 2222
+      authentication: "Public Key Only"
+      timeout_seconds: 60
+      max_retries: 5
+      encryption: "AES-256-GCM"
+    transfers:
+      - name: "PM Data Collection"
+        direction: "EMS → NMS"
+        source_path: "/export/pm/v2/"
+        destination_path: "/import/pm/v2/"
+        file_pattern: "PM_*.xml.gz"
+        schedule: "Every 5 minutes"
+        description: "Performance management data transfer with compression"
+        format: "3GPP XML (TS 32.435) + GZIP"
+
+main_sequence: |
+  sequenceDiagram
+      participant NMS as NMS<br/>(Upper System)
+      participant EMS as EMS<br/>(Element Mgmt)
+      participant NE as Network Element
+
+      NMS->>EMS: REST API v2 Request (GET /network-elements)
+      EMS->>NE: SNMP/NETCONF Query
+      NE-->>EMS: Element Info Response
+      EMS-->>NMS: JSON Response (Element List + Pagination)
+
+      Note over NMS,EMS: Alarm Flow
+
+      NE->>EMS: SNMP Trap (Alarm Raised)
+      EMS->>NMS: REST Notification (POST /alarms)
+      NMS->>EMS: Acknowledge (POST /alarms/{id}/ack)
+      EMS-->>NMS: Confirmed + Priority
+
+      Note over EMS,NMS: File Transfer Flow (Enhanced Security)
+
+      EMS->>NMS: SFTP Transfer (PM Data, AES-256)
+      NMS-->>EMS: Transfer ACK
+
+      Note over EMS,NMS: Health Check
+
+      NMS->>EMS: GET /health
+      EMS-->>NMS: 200 OK (Healthy)

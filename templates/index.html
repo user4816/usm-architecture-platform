@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USM AI Platform</title>
+    <meta name="description"
+        content="Unified System Management Architecture Platform — NBI Management, RFP Management, Auto-Dimensioning, and Statistics.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" href="data:,">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js"></script>
+</head>
+
+<body>
+
+    <!-- ═══ Platform Header ═══ -->
+    <header class="s-header">
+        <div class="s-header-left">
+            <a href="#/" class="s-logo-link" id="logo-home-link" title="Go to Dashboard">
+                <div class="s-logo-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="s-logo-title">USM AI Platform
+                        <span class="s-prototype-badge" title="Version 3.0.0 — Internal Beta Build">Beta</span>
+                    </div>
+                    <div class="s-logo-subtitle">Unified System Management</div>
+                </div>
+            </a>
+        </div>
+        <div class="s-header-right" style="margin-left: auto;">
+            <span id="status-badge" class="s-status-badge"></span>
+            <!-- NBI-specific buttons: grouped for easy show/hide -->
+            <div id="nbi-header-actions" class="s-header-action-group hidden">
+                <button id="sidebar-toggle" class="s-btn-ghost" title="Toggle sidebar">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:20px;height:20px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+                <button id="btn-save" class="s-btn s-btn-secondary" disabled>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                    </svg>
+                    Save
+                </button>
+                <button id="btn-pdf" class="s-btn s-btn-primary" disabled>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span id="pdf-btn-text">Download PDF</span>
+                </button>
+                <button id="btn-upload-pdf" class="s-btn s-btn-primary hidden" onclick="downloadUploadChatPDF()"
+                    disabled style="opacity:0.5;">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span>Download PDF</span>
+                </button>
+                <button id="btn-new-chat" class="s-btn s-btn-accent" onclick="resetChat()">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    New Chat
+                </button>
+            </div>
+            <button id="btn-theme-toggle" class="s-btn s-btn-ghost" title="Toggle Dark/Light mode"
+                onclick="toggleTheme()" style="display: none;">
+                <svg id="icon-sun" class="hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18"
+                    height="18">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <svg id="icon-moon" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- ═══ Global Navigation Bar (GNB) ═══ -->
+    <nav class="s-gnb" id="global-nav">
+        <div class="s-gnb-inner">
+            <a href="#/" class="s-gnb-item" data-view="dashboard">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+                Dashboard
+            </a>
+            <a href="#/nbi" class="s-gnb-item" data-view="nbi">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                NBI Management
+            </a>
+            <a href="#/rfp" class="s-gnb-item" data-view="rfp">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                </svg>
+                RFP Management
+            </a>
+            <a href="#/dimensioning" class="s-gnb-item" data-view="dimensioning">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+                Auto-Dimensioning
+            </a>
+            <a href="#/statistics" class="s-gnb-item" data-view="statistics">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                Statistics
+            </a>
+        </div>
+        <!-- Mobile hamburger toggle -->
+        <button class="s-gnb-mobile-toggle" id="gnb-mobile-toggle" title="Toggle menu" onclick="toggleGnbMobile()">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════════════════
+         VIEW: Dashboard (default)
+         ═══════════════════════════════════════════════════════ -->
+    <div id="view-dashboard" class="s-view">
+        <div class="s-dashboard">
+            <div class="s-dashboard-header">
+                <h1 class="s-dashboard-title">Platform Overview</h1>
+                <p class="s-dashboard-desc">Manage all USM modules from a single unified interface.</p>
+            </div>
+            <div class="s-dashboard-grid">
+                <!-- NBI Management Card -->
+                <div class="s-dash-card s-dash-card--active" onclick="navigateTo('nbi')">
+                    <div class="s-dash-card-accent" style="background: linear-gradient(135deg, #2563EB, #3B82F6);">
+                    </div>
+                    <div class="s-dash-card-header">
+                        <div class="s-dash-card-icon" style="background: linear-gradient(135deg, #2563EB, #3B82F6);">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <span class="s-dash-badge s-dash-badge--active">Active</span>
+                    </div>
+                    <h3 class="s-dash-card-title">NBI Management</h3>
+                    <p class="s-dash-card-desc">Northbound Interface specification viewer with AI-powered assistant,
+                        document comparison, and PDF generation.</p>
+                    <div class="s-dash-card-footer">
+                        <span class="s-dash-card-stat">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                            USM v1 / v2
+                        </span>
+                        <span class="s-dash-card-action">Open →</span>
+                    </div>
+                </div>
+
+                <!-- RFP Management Card -->
+                <div class="s-dash-card s-dash-card--coming">
+                    <div class="s-dash-card-accent" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);">
+                    </div>
+                    <div class="s-dash-card-header">
+                        <div class="s-dash-card-icon" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                            </svg>
+                        </div>
+                        <span class="s-dash-badge s-dash-badge--coming">Coming Soon</span>
+                    </div>
+                    <h3 class="s-dash-card-title">RFP Management</h3>
+                    <p class="s-dash-card-desc">Automated RFP response generation and tracking with intelligent template
+                        matching.</p>
+                    <div class="s-dash-card-footer">
+                        <span class="s-dash-card-stat">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Q3 2026
+                        </span>
+                        <span class="s-dash-card-action s-dash-card-action--disabled">Coming Soon</span>
+                    </div>
+                </div>
+
+                <!-- Auto-Dimensioning Card -->
+                <div class="s-dash-card s-dash-card--coming">
+                    <div class="s-dash-card-accent" style="background: linear-gradient(135deg, #10B981, #34D399);">
+                    </div>
+                    <div class="s-dash-card-header">
+                        <div class="s-dash-card-icon" style="background: linear-gradient(135deg, #10B981, #34D399);">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <span class="s-dash-badge s-dash-badge--coming">Coming Soon</span>
+                    </div>
+                    <h3 class="s-dash-card-title">Auto-Dimensioning</h3>
+                    <p class="s-dash-card-desc">Network capacity planning with automated dimensioning calculations and
+                        resource optimization.</p>
+                    <div class="s-dash-card-footer">
+                        <span class="s-dash-card-stat">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Q3 2026
+                        </span>
+                        <span class="s-dash-card-action s-dash-card-action--disabled">Coming Soon</span>
+                    </div>
+                </div>
+
+                <!-- Statistics Card -->
+                <div class="s-dash-card s-dash-card--coming">
+                    <div class="s-dash-card-accent" style="background: linear-gradient(135deg, #F59E0B, #FBBF24);">
+                    </div>
+                    <div class="s-dash-card-header">
+                        <div class="s-dash-card-icon" style="background: linear-gradient(135deg, #F59E0B, #FBBF24);">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
+                        </div>
+                        <span class="s-dash-badge s-dash-badge--coming">Coming Soon</span>
+                    </div>
+                    <h3 class="s-dash-card-title">Statistics</h3>
+                    <p class="s-dash-card-desc">Comprehensive analytics dashboard with usage metrics, performance
+                        insights, and trend analysis.</p>
+                    <div class="s-dash-card-footer">
+                        <span class="s-dash-card-stat">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Q4 2026
+                        </span>
+                        <span class="s-dash-card-action s-dash-card-action--disabled">Coming Soon</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         VIEW: NBI Management (existing functionality)
+         ═══════════════════════════════════════════════════════ -->
+    <div id="view-nbi" class="s-view hidden">
+        <div class="s-main-wrapper">
+            <!-- Sidebar -->
+            <aside id="sidebar" class="s-sidebar">
+                <!-- Version Toggle -->
+                <div class="s-version-toggle-wrapper">
+                    <div class="s-version-toggle" id="sidebar-version-toggle">
+                        <button class="s-version-btn active" data-version="USMv1">USM v1</button>
+                        <button class="s-version-btn" data-version="USMv2">USM v2</button>
+                    </div>
+                </div>
+                <div class="s-sidebar-header">
+                    <span class="s-sidebar-label">Packages</span>
+                </div>
+                <div id="tree-container" class="s-tree-container">
+                    <div style="text-align:center;padding:40px 0;color:var(--s-text-muted);">Loading...</div>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="s-main">
+                <!-- Tab Bar: Chat | Preview | Compare -->
+                <div class="s-tab-bar">
+                    <button class="s-tab-btn tab-btn active" data-tab="chat">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                        Chat
+                    </button>
+                    <button class="s-tab-btn tab-btn" data-tab="preview">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                        Preview
+                    </button>
+                    <button class="s-tab-btn tab-btn" data-tab="compare">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                        Compare
+                    </button>
+                    <button class="s-tab-btn tab-btn" data-tab="upload">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        Upload
+                    </button>
+                    <div id="file-selector"></div>
+                </div>
+
+                <!-- Chat Panel (Default) -->
+                <div id="panel-chat" class="s-panel">
+                    <div class="s-chat-header">
+                        <span class="s-chat-header-label">Assistant Model</span>
+                        <div class="s-model-selector-wrapper" id="model-selector-wrapper">
+                            <button id="btn-model-select" class="s-model-select-btn">
+                                <span id="selected-model-text">Qwen2.5:32B-instruct</span>
+                                <svg class="s-model-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <ul id="model-dropdown-menu" class="s-model-dropdown hidden">
+                                <li class="s-model-option active" data-model="qwen2.5:32b-instruct-q5_K_M">
+                                    <span>Qwen2.5:32B-instruct</span>
+                                    <svg class="s-model-check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </li>
+                                <li class="s-model-option" data-model="Gauss">
+                                    <span>Gauss</span>
+                                    <svg class="s-model-check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="s-chat-messages" id="chat-messages">
+                        <div class="s-chat-welcome">
+                            <div class="s-chat-welcome-icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                </svg>
+                            </div>
+                            <h2 class="s-chat-welcome-title">USM NBI Assistant</h2>
+                            <p class="s-chat-welcome-desc">Ask questions about NBI specifications, compare packages,
+                                <br>
+                                or explore API details.
+                            </p>
+                            <div class="s-chat-suggestions">
+                                <button class="s-chat-suggestion" onclick="chatSuggest(this)"
+                                    data-query="Summarize USMv1 26A Verizon changes">
+                                    <span class="action-icon">📋</span>
+                                    <span class="action-title">Summarize changes</span>
+                                    <span class="action-desc">Compare version differences for a package</span>
+                                </button>
+                                <button class="s-chat-suggestion" onclick="chatSuggest(this)"
+                                    data-query="Show USMv1 26B Verizon CM REST API specs">
+                                    <span class="action-icon">🔗</span>
+                                    <span class="action-title">REST API Specification</span>
+                                    <span class="action-desc">View detailed API endpoints and parameters</span>
+                                </button>
+                                <button class="s-chat-suggestion" onclick="chatSuggest(this)"
+                                    data-query="USMv1 26A Verizon and 26B Verizon differences">
+                                    <span class="action-icon">⚖️</span>
+                                    <span class="action-title">Compare packages</span>
+                                    <span class="action-desc">Diff two package versions side by side</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="s-chat-input-bar">
+                        <div class="s-chat-input-wrapper">
+                            <textarea id="chat-input" class="s-chat-input" rows="1"
+                                placeholder="Ask anything about NBI..."
+                                onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();if(!document.getElementById('btn-chat-send').disabled)sendChat()}"></textarea>
+                            <button id="btn-chat-send" class="s-chat-send-btn" onclick="sendChat()">
+                                <svg id="send-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 19V5m0 0l-7 7m7-7l7 7" />
+                                </svg>
+                                <svg id="stop-icon" class="hidden" viewBox="0 0 24 24" fill="currentColor">
+                                    <rect x="6" y="6" width="12" height="12" rx="2" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="s-chat-disclaimer">
+                        LLMs can make mistakes. Please verify important information.
+                    </div>
+                </div>
+
+                <!-- Editor Panel (hidden by default) -->
+                <div id="panel-editor" class="s-panel hidden">
+                    <div id="editor-empty" class="s-panel-empty">
+                        <div class="s-guide-column">
+                            <div class="s-guide-icon-box">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                </svg>
+                            </div>
+                            <p class="s-guide-text">Select a package from the sidebar</p>
+                            <p class="s-guide-desc">Navigate: Package &rarr; Operator &rarr; File</p>
+                        </div>
+                    </div>
+                    <textarea id="editor-area" class="editor-textarea hidden" spellcheck="false"
+                        placeholder="File contents will appear here..."></textarea>
+                </div>
+
+                <!-- Preview Panel -->
+                <div id="panel-preview" class="s-panel hidden">
+                    <div id="preview-empty" class="s-panel-empty">
+                        <div class="s-guide-column style-pull-up">
+                            <div class="s-guide-icon-box">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </div>
+                            <p class="s-guide-text">Select a document to preview</p>
+                            <p class="s-guide-desc">Select a .md or .yaml file, then click the Preview button.</p>
+                        </div>
+                    </div>
+                    <iframe id="preview-frame" class="hidden"></iframe>
+                </div>
+
+                <!-- Compare Panel -->
+                <div id="panel-compare" class="s-panel hidden">
+                    <div class="s-compare-toolbar">
+                        <div class="s-compare-group">
+                            <span class="s-compare-label s-compare-label-base">BASE</span>
+                            <select id="compare-pkg-a" class="s-select">
+                                <option value="">Package</option>
+                            </select>
+                            <select id="compare-op-a" class="s-select">
+                                <option value="">Operator</option>
+                            </select>
+                        </div>
+                        <span class="s-compare-arrow">&harr;</span>
+                        <div class="s-compare-group">
+                            <span class="s-compare-label s-compare-label-target">TARGET</span>
+                            <select id="compare-pkg-b" class="s-select">
+                                <option value="">Package</option>
+                            </select>
+                            <select id="compare-op-b" class="s-select">
+                                <option value="">Operator</option>
+                            </select>
+                        </div>
+                        <select id="compare-file" class="s-select" style="min-width:110px;">
+                            <option value="doc.yaml">doc.yaml</option>
+                            <option value="doc.md">doc.md</option>
+                        </select>
+                        <div class="s-compare-actions">
+                            <button id="btn-compare" class="s-btn s-btn-accent" onclick="runCompare()">
+                                Run Compare
+                            </button>
+                            <button id="btn-reset-compare" class="s-btn s-btn-secondary" onclick="resetCompare()">
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+                    <div id="compare-empty" class="s-panel-empty">
+                        <div class="s-guide-column style-pull-up">
+                            <div class="s-guide-icon-box">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                </svg>
+                            </div>
+                            <p class="s-guide-text">Select two versions to compare</p>
+                            <p class="s-guide-desc">Choose Base and Target packages, then click Run Compare</p>
+                        </div>
+                    </div>
+                    <iframe id="compare-frame" class="hidden"
+                        style="flex:1;width:100%;height:100%;border:none;"></iframe>
+                </div>
+
+                <!-- Upload Panel -->
+                <div id="panel-upload" class="s-panel hidden">
+                    <div class="s-upload-header">
+                        <span class="s-upload-title">Upload Documents</span>
+                        <button id="btn-upload-reset" class="s-btn s-btn-secondary s-btn-sm"
+                            onclick="resetUploadDocs()">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            <span id="btn-upload-reset-text">Reset</span>
+                        </button>
+                    </div>
+                    <div id="upload-dropzone-wrapper" class="s-upload-dropzone-wrapper">
+                        <div id="upload-dropzone" class="s-upload-dropzone">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                style="width:40px;height:40px;opacity:0.4;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                            <p class="s-upload-dropzone-text">Drag & drop files here or <span
+                                    class="s-upload-browse">browse</span></p>
+                            <p class="s-upload-dropzone-hint">.pdf, .docx — Maximum 5 files</p>
+                            <input type="file" id="upload-file-input" multiple accept=".pdf,.docx,.doc"
+                                style="display:none;">
+                        </div>
+                        <button id="upload-dropzone-toggle" class="s-upload-dropzone-toggle hidden"
+                            onclick="toggleUploadDropzone()" title="Toggle upload area">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 15l7-7 7 7" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="upload-file-list" class="s-upload-file-list"></div>
+                    <div class="s-chat-messages" id="upload-chat-messages">
+                        <div class="s-chat-welcome">
+                            <div class="s-chat-welcome-icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                </svg>
+                            </div>
+                            <h2 class="s-chat-welcome-title">Document Assistant</h2>
+                            <p class="s-chat-welcome-desc">Upload PDF or Word documents, then ask questions about<br>
+                                their content.</p>
+                        </div>
+                    </div>
+                    <div class="s-chat-input-bar">
+                        <div class="s-chat-input-wrapper">
+                            <textarea id="upload-chat-input" class="s-chat-input" rows="1"
+                                placeholder="Ask about uploaded documents..."
+                                onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();if(!document.getElementById('btn-upload-chat-send').disabled)sendUploadChat()}"></textarea>
+                            <button id="btn-upload-chat-send" class="s-chat-send-btn" onclick="sendUploadChat()">
+                                <svg id="upload-send-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 19V5m0 0l-7 7m7-7l7 7" />
+                                </svg>
+                                <svg id="upload-stop-icon" class="hidden" viewBox="0 0 24 24" fill="currentColor">
+                                    <rect x="6" y="6" width="12" height="12" rx="2" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="s-chat-disclaimer">
+                        LLMs can make mistakes. Please verify important information.
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         VIEW: RFP Management (Placeholder)
+         ═══════════════════════════════════════════════════════ -->
+    <div id="view-rfp" class="s-view hidden">
+        <div class="s-placeholder-view">
+            <div class="s-placeholder-content">
+                <div class="s-placeholder-icon" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                    </svg>
+                </div>
+                <h2 class="s-placeholder-title">RFP Management</h2>
+                <p class="s-placeholder-desc">Automated RFP response generation and intelligent template matching.</p>
+                <div class="s-placeholder-badge">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:16px;height:16px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Coming Soon — Estimated Q3 2026
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         VIEW: Auto-Dimensioning (Placeholder)
+         ═══════════════════════════════════════════════════════ -->
+    <div id="view-dimensioning" class="s-view hidden">
+        <div class="s-placeholder-view">
+            <div class="s-placeholder-content">
+                <div class="s-placeholder-icon" style="background: linear-gradient(135deg, #10B981, #34D399);">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                </div>
+                <h2 class="s-placeholder-title">Auto-Dimensioning</h2>
+                <p class="s-placeholder-desc">Network capacity planning with automated dimensioning calculations.</p>
+                <div class="s-placeholder-badge">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:16px;height:16px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Coming Soon — Estimated Q3 2026
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         VIEW: Statistics (Placeholder)
+         ═══════════════════════════════════════════════════════ -->
+    <div id="view-statistics" class="s-view hidden">
+        <div class="s-placeholder-view">
+            <div class="s-placeholder-content">
+                <div class="s-placeholder-icon" style="background: linear-gradient(135deg, #F59E0B, #FBBF24);">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                </div>
+                <h2 class="s-placeholder-title">Statistics</h2>
+                <p class="s-placeholder-desc">Comprehensive analytics dashboard with usage metrics and trend analysis.
+                </p>
+                <div class="s-placeholder-badge">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:16px;height:16px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Coming Soon — Estimated Q4 2026
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"
+        style="position:fixed;bottom:16px;right:16px;z-index:50;display:flex;flex-direction:column;gap:8px;"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: false, theme: 'default' });</script>
+    <script src="/static/js/app.js"></script>
+
+</body>
+
+</html>

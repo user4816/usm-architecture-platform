@@ -1,0 +1,171 @@
+CM:
+  rest:
+    info:
+      title: CM REST API
+      version: '3.0'
+      description: Configuration Management REST API for network element provisioning
+        and inventory. (USMv2 Enhanced) (USMv2 Enhanced)
+    endpoints:
+    - path: /api/v1/network-elements
+      method: GET
+      summary: List Network Elements
+      description: Returns a list of all managed network elements.
+      parameters:
+      - name: status
+        in: query
+        type: string
+        required: false
+        description: Status filter (active, inactive, maintenance)
+      - name: page
+        in: query
+        type: integer
+        required: false
+        description: 'Page number (default: 1)'
+      - name: region
+        in: query
+        type: string
+        required: false
+        description: Region selection for queries
+      responses:
+        200:
+          description: Success
+          schema: NetworkElementList
+        401:
+          description: Authentication failed
+      protocol_support: HTTP/1.1, HTTP/2, HTTP/3
+    - path: /api/v1/network-elements/{ne_id}
+      method: GET
+      summary: Get Network Element Details
+      description: Returns detailed information for a specific network element.
+      parameters:
+      - name: ne_id
+        in: path
+        type: string
+        required: true
+        description: Network element ID
+      responses:
+        200:
+          description: Success
+          schema: NetworkElement
+        404:
+          description: Element not found
+      protocol_support: HTTP/1.1, HTTP/2, HTTP/3
+  sftp:
+    info:
+      title: CM SFTP Interface
+      version: '2.0'
+      description: SFTP file transfers for configuration management operations.
+    connection:
+      protocol: SFTP
+      port: 2222
+      authentication: Public Key / Password
+      timeout_seconds: 120
+      max_retries: 3
+      encryption: ChaCha20-Poly1305
+    transfers:
+    - name: Inventory Sync
+      direction: EMS → NMS
+      source_path: /export/inventory/
+      destination_path: /import/inventory/
+      file_pattern: INV_*.csv
+      schedule: Daily 02:00
+      description: Full network element inventory synchronization
+      format: CSV (UTF-8)
+    - name: SW Package Deploy
+      direction: NMS → EMS
+      source_path: /packages/sw/
+      destination_path: /import/sw/
+      file_pattern: '*.pkg'
+      schedule: On-demand
+      description: Network element software upgrade package delivery
+      format: Binary Package
+    - name: Config Backup
+      direction: EMS → NMS
+      source_path: /export/config/
+      destination_path: /backup/config/
+      file_pattern: CFG_*.tar.gz
+      schedule: Daily 03:00
+      description: Network element configuration file backup
+      format: TAR.GZ Archive
+FM:
+  rest:
+    info:
+      title: FM REST API
+      version: '3.0'
+      description: Fault Management REST API for alarm monitoring and acknowledgement.
+        (USMv2 Enhanced) (USMv2 Enhanced)
+    endpoints:
+    - path: /api/v1/alarms
+      method: GET
+      summary: List Alarms
+      description: Retrieves a list of active alarms with optional filtering.
+      parameters:
+      - name: severity
+        in: query
+        type: string
+        required: false
+        description: Severity filter (critical, major, minor, warning)
+      - name: from_date
+        in: query
+        type: string
+        required: false
+        description: Start date/time (ISO 8601 format)
+      responses:
+        200:
+          description: Success
+          schema: AlarmList
+        400:
+          description: Invalid request parameters
+      protocol_support: HTTP/1.1, HTTP/2, HTTP/3
+    - path: /api/v1/alarms/{alarm_id}/acknowledge
+      method: POST
+      summary: Acknowledge Alarm
+      description: Acknowledges a specific alarm.
+      parameters:
+      - name: alarm_id
+        in: path
+        type: string
+        required: true
+        description: Alarm ID
+      request_body:
+        content_type: application/json
+        schema:
+          operator: string (acknowledging operator)
+          comment: string (optional comment)
+      responses:
+        200:
+          description: Acknowledgement successful
+        404:
+          description: Alarm not found
+      protocol_support: HTTP/1.1, HTTP/2, HTTP/3
+PM:
+  sftp:
+    info:
+      title: PM SFTP Interface
+      version: '2.0'
+      description: SFTP file transfers for performance management data collection.
+    connection:
+      protocol: SFTP
+      port: 2222
+      authentication: Public Key / Password
+      timeout_seconds: 120
+      max_retries: 3
+      encryption: ChaCha20-Poly1305
+    transfers:
+    - name: PM Data Collection
+      direction: EMS → NMS
+      source_path: /export/pm/
+      destination_path: /import/pm/
+      file_pattern: PM_*.xml
+      schedule: Every 15 minutes
+      description: Periodic performance management data transfer in XML format
+      format: 3GPP XML (TS 32.435)
+main_sequence: "sequenceDiagram\n    participant NMS as NMS<br/>(Upper System)\n \
+  \   participant EMS as EMS<br/>(Element Mgmt)\n    participant NE as Network Element\n\
+  \n    NMS->>EMS: REST API Request (GET /network-elements)\n    EMS->>NE: SNMP/CLI\
+  \ Query\n    NE-->>EMS: Element Info Response\n    EMS-->>NMS: JSON Response (Element\
+  \ List)\n\n    Note over NMS,EMS: Alarm Flow\n\n    NE->>EMS: SNMP Trap (Alarm Raised)\n\
+  \    EMS->>NMS: REST Notification (POST /alarms)\n    NMS->>EMS: Acknowledge (POST\
+  \ /alarms/{id}/ack)\n    EMS-->>NMS: Acknowledgement Confirmed\n\n    Note over\
+  \ EMS,NMS: File Transfer Flow\n\n    EMS->>NMS: SFTP Transfer (PM Data)\n    NMS-->>EMS:\
+  \ Transfer ACK\n"
