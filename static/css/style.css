@@ -2847,3 +2847,150 @@ body {
         max-height: 400px;
     }
 }
+
+/* ══════════════════════════════════════════════════════════
+   MODULE SECONDARY TAB BAR
+   ══════════════════════════════════════════════════════════ */
+
+/* Container wrapping tab bar + all sub-panels */
+.s-module-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Tab bar — sits below GNB, visually distinct from NBI internal tabs */
+.s-module-tabs {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 0 24px;
+    background: var(--s-bg-surface);
+    border-bottom: 2px solid var(--s-border);
+    flex-shrink: 0;
+    z-index: 20;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.s-module-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.s-module-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--s-text-muted);
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    transition: all var(--s-transition);
+    white-space: nowrap;
+    font-family: var(--s-font-sans);
+    margin-bottom: -2px;
+    position: relative;
+}
+
+.s-module-tab:hover {
+    color: var(--s-text-primary);
+    background: var(--s-bg-hover);
+}
+
+.s-module-tab.active {
+    color: var(--s-blue);
+    border-bottom-color: var(--s-blue);
+    font-weight: 700;
+}
+
+.s-module-tab .s-tab-badge {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 7px;
+    border-radius: var(--s-radius-pill);
+    background: var(--s-bg-hover);
+    color: var(--s-text-muted);
+    letter-spacing: 0.02em;
+}
+
+.s-module-tab.active .s-tab-badge {
+    background: var(--s-blue-subtle);
+    color: var(--s-blue);
+}
+
+/* Sub-tab content panels */
+.s-module-panel {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.s-module-panel.hidden {
+    display: none;
+}
+
+/* Sub-tab placeholder for coming-soon panels */
+.s-subtab-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 60px 40px;
+}
+
+.s-subtab-placeholder-inner {
+    text-align: center;
+    max-width: 360px;
+}
+
+.s-subtab-placeholder-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    background: var(--s-bg-hover);
+}
+
+.s-subtab-placeholder-icon svg {
+    width: 28px;
+    height: 28px;
+    color: var(--s-text-muted);
+}
+
+.s-subtab-placeholder-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--s-text-primary);
+    margin-bottom: 8px;
+}
+
+.s-subtab-placeholder-desc {
+    font-size: 13px;
+    color: var(--s-text-muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+.s-subtab-placeholder-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--s-amber);
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-radius: var(--s-radius-pill);
+}

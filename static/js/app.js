@@ -1961,10 +1961,12 @@ function switchView(viewName) {
         item.classList.toggle('active', item.dataset.view === viewName);
     });
 
-    // Toggle NBI-specific header buttons
-    const nbiActions = $('nbi-header-actions');
-    if (nbiActions) {
-        nbiActions.classList.toggle('hidden', viewName !== 'nbi');
+    // Restore last active sub-tab (or default to first)
+    if (viewName !== 'dashboard') {
+        const lastSubtab = _moduleTabState[viewName];
+        if (lastSubtab) {
+            switchModuleTab(viewName, lastSubtab, true);
+        }
     }
 
     // Close mobile menu after navigation
@@ -1986,6 +1988,43 @@ function navigateTo(viewName) {
 function toggleGnbMobile() {
     const inner = document.querySelector('.s-gnb-inner');
     if (inner) inner.classList.toggle('gnb-mobile-open');
+}
+
+// ─── Module Sub-Tab Switching ─────────────────────────────────
+
+// Default sub-tabs per module + last-visited memory
+const _moduleTabDefaults = {
+    nbi: 'unified-tab',
+    rfp: 'draft-tab',
+    dimensioning: 'autodim-tab',
+    statistics: 'overview-tab'
+};
+const _moduleTabState = { ...(_moduleTabDefaults) };
+
+function switchModuleTab(moduleName, subtabId, isRestore) {
+    // Update remembered state
+    _moduleTabState[moduleName] = subtabId;
+
+    // Toggle tab bar active state
+    const tabBar = document.querySelector(`.s-module-tabs[data-module="${moduleName}"]`);
+    if (tabBar) {
+        tabBar.querySelectorAll('.s-module-tab').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.subtab === subtabId);
+        });
+    }
+
+    // Toggle panels
+    document.querySelectorAll(`.s-module-panel[data-module="${moduleName}"]`).forEach(panel => {
+        const match = panel.id === `${moduleName}-panel-${subtabId}`;
+        panel.classList.toggle('hidden', !match);
+    });
+
+    // NBI-specific: only show header actions when NBI sub-tab is active
+    const nbiActions = $('nbi-header-actions');
+    if (nbiActions) {
+        const showNbiButtons = (state.activeView === 'nbi' && _moduleTabState.nbi === 'nbi-tab');
+        nbiActions.classList.toggle('hidden', !showNbiButtons);
+    }
 }
 
 // ═══════════════════════════════════════════════════════════
