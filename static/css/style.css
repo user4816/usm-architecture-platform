@@ -939,6 +939,8 @@ body {
     font-weight: 600;
     font-size: 13px;
     color: var(--s-text-primary);
+    word-break: keep-all;
+    overflow-wrap: break-word;
 }
 
 .s-chat-suggestion .action-desc {
@@ -946,6 +948,8 @@ body {
     color: var(--s-text-muted);
     font-weight: 400;
     line-height: 1.4;
+    word-break: keep-all;
+    overflow-wrap: break-word;
 }
 
 /* Message bubbles */
@@ -2019,9 +2023,9 @@ body {
 /* ── Feature Tile Grid ───────────────────────────────────── */
 .s-dash-tiles {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
-    gap: 1px;
-    background: var(--s-border);
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    background: var(--s-bg-primary);
 }
 
 .s-dash-tile {
@@ -2036,6 +2040,8 @@ body {
     transition: all 0.2s ease;
     text-decoration: none;
     position: relative;
+    border-right: 1px solid var(--s-border);
+    border-bottom: 1px solid var(--s-border);
 }
 
 .s-dash-tile--active {
