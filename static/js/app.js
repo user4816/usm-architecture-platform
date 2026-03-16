@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initVersionToggles();
     initModelSelector();
     initUpload();
+    initRfp();
 });
 
 // ─── Theme Toggle ───────────────────────────────────────
@@ -1985,4 +1986,560 @@ function navigateTo(viewName) {
 function toggleGnbMobile() {
     const inner = document.querySelector('.s-gnb-inner');
     if (inner) inner.classList.toggle('gnb-mobile-open');
+}
+
+// ═══════════════════════════════════════════════════════════
+// RFP MANAGEMENT MODULE
+// ═══════════════════════════════════════════════════════════
+
+// ─── Mock Data ────────────────────────────────────────────
+const RFP_MOCK_DATA = [
+    {
+        id: 'rfp-001',
+        operator: 'Verizon',
+        year: '2026',
+        title: 'Verizon 5G Core Network Expansion RFP 2026',
+        requirements: [
+            { id: 'REQ-001', requirement: 'Support for 5G SA Core with 3GPP R16 compliance', answer: 'Compliant', owner: 'J. Kim', jiraId: 'VRZN-1001', resultType: '', metadata: {} },
+            { id: 'REQ-002', requirement: 'Network slicing with min 100 slice instances per node', answer: 'Partial', owner: 'S. Park', jiraId: 'VRZN-1002', resultType: '', metadata: {} },
+            { id: 'REQ-003', requirement: 'E2E latency ≤ 10ms for URLLC slice category', answer: 'Under Review', owner: 'M. Lee', jiraId: 'VRZN-1003', resultType: '', metadata: {} },
+            { id: 'REQ-004', requirement: 'Northbound RESTCONF/YANG interface for all CM operations', answer: 'Compliant', owner: 'J. Kim', jiraId: 'VRZN-1004', resultType: '', metadata: {} },
+            { id: 'REQ-005', requirement: 'Auto-scaling based on real-time traffic load with ≤ 30s reaction time', answer: 'Partial', owner: 'H. Choi', jiraId: 'VRZN-1005', resultType: '', metadata: {} },
+            { id: 'REQ-006', requirement: 'Support for IPv6 single-stack and IPv4/v6 dual-stack operation', answer: 'Compliant', owner: 'S. Park', jiraId: 'VRZN-1006', resultType: '', metadata: {} },
+            { id: 'REQ-007', requirement: 'Multi-vendor interoperability testing certification (O-RAN Alliance)', answer: 'Under Review', owner: 'M. Lee', jiraId: 'VRZN-1007', resultType: '', metadata: {} },
+            { id: 'REQ-008', requirement: 'Real-time PM/FM data export via Kafka streaming interface', answer: 'Compliant', owner: 'J. Kim', jiraId: 'VRZN-1008', resultType: '', metadata: {} },
+        ]
+    },
+    {
+        id: 'rfp-002',
+        operator: 'Verizon',
+        year: '2025',
+        title: 'Verizon Edge Computing Platform Deployment',
+        requirements: [
+            { id: 'REQ-010', requirement: 'MEC platform integration with ETSI MEC 003 API framework', answer: 'Compliant', owner: 'D. Hong', jiraId: 'VRZN-2010', resultType: '', metadata: {} },
+            { id: 'REQ-011', requirement: 'Container orchestration with Kubernetes 1.28+ support', answer: 'Compliant', owner: 'S. Park', jiraId: 'VRZN-2011', resultType: '', metadata: {} },
+            { id: 'REQ-012', requirement: 'GPU workload scheduling for AI/ML edge inference', answer: 'Partial', owner: 'H. Choi', jiraId: 'VRZN-2012', resultType: '', metadata: {} },
+        ]
+    },
+    {
+        id: 'rfp-003',
+        operator: 'AT&T',
+        year: '2026',
+        title: 'AT&T Unified Management System Modernization Program',
+        requirements: [
+            { id: 'REQ-020', requirement: 'Single-pane-of-glass management for 4G/5G converged network', answer: 'Compliant', owner: 'J. Kim', jiraId: 'ATT-3001', resultType: '', metadata: {} },
+            { id: 'REQ-021', requirement: 'Role-based access control with LDAP/SAML integration', answer: 'Compliant', owner: 'M. Lee', jiraId: 'ATT-3002', resultType: '', metadata: {} },
+            { id: 'REQ-022', requirement: 'Fault correlation engine with ≥ 90% root cause accuracy', answer: 'Under Review', owner: 'H. Choi', jiraId: 'ATT-3003', resultType: '', metadata: {} },
+            { id: 'REQ-023', requirement: 'Closed-loop automation for self-healing network scenarios', answer: 'Partial', owner: 'S. Park', jiraId: 'ATT-3004', resultType: '', metadata: {} },
+            { id: 'REQ-024', requirement: 'Compliance with SOC 2 Type II and FedRAMP Moderate baseline', answer: 'Under Review', owner: 'D. Hong', jiraId: 'ATT-3005', resultType: '', metadata: {} },
+        ]
+    },
+    {
+        id: 'rfp-004',
+        operator: 'AT&T',
+        year: '2025',
+        title: 'AT&T Network Analytics and Assurance Platform RFP',
+        requirements: [
+            { id: 'REQ-030', requirement: 'Real-time network KPI dashboard with sub-second refresh', answer: 'Compliant', owner: 'J. Kim', jiraId: 'ATT-4001', resultType: '', metadata: {} },
+            { id: 'REQ-031', requirement: 'Predictive analytics for capacity planning with ML models', answer: 'Under Review', owner: 'H. Choi', jiraId: 'ATT-4002', resultType: '', metadata: {} },
+        ]
+    },
+    {
+        id: 'rfp-005',
+        operator: 'T-Mobile',
+        year: '2026',
+        title: 'T-Mobile Open RAN Management and Orchestration Requirements',
+        requirements: [
+            { id: 'REQ-040', requirement: 'O-RAN SMO compliant with O-RAN WG1/WG2 specifications', answer: 'Compliant', owner: 'S. Park', jiraId: 'TMO-5001', resultType: '', metadata: {} },
+            { id: 'REQ-041', requirement: 'Support for near-RT RIC with xApp lifecycle management', answer: 'Partial', owner: 'M. Lee', jiraId: 'TMO-5002', resultType: '', metadata: {} },
+            { id: 'REQ-042', requirement: 'Automated RAN feature activation and rollback capability', answer: 'Under Review', owner: 'H. Choi', jiraId: 'TMO-5003', resultType: '', metadata: {} },
+            { id: 'REQ-043', requirement: 'Multi-vendor RU/DU/CU management with unified topology view', answer: 'Compliant', owner: 'J. Kim', jiraId: 'TMO-5004', resultType: '', metadata: {} },
+        ]
+    }
+];
+
+// ─── RFP State ────────────────────────────────────────────
+const rfpState = {
+    selectedRfpId: null,
+    selectedReqId: null,
+    requirements: [],
+    searchTerm: '',
+    treeSearchTerm: '',
+    history: {}  // keyed by req id
+};
+
+// ─── LocalStorage Persistence ─────────────────────────────
+const RFP_STORAGE_KEY = 'usm_rfp_data';
+
+function rfpLoadFromStorage() {
+    try {
+        const raw = localStorage.getItem(RFP_STORAGE_KEY);
+        if (!raw) return;
+        const saved = JSON.parse(raw);
+        // Merge saved requirement metadata back into mock data
+        if (saved.requirements) {
+            for (const rfp of RFP_MOCK_DATA) {
+                for (const req of rfp.requirements) {
+                    if (saved.requirements[req.id]) {
+                        Object.assign(req, saved.requirements[req.id]);
+                    }
+                }
+            }
+        }
+        if (saved.history) {
+            rfpState.history = saved.history;
+        }
+    } catch (e) {
+        console.warn('[RFP] Failed to load from localStorage:', e);
+    }
+}
+
+function rfpSaveToStorage() {
+    try {
+        const reqMap = {};
+        for (const rfp of RFP_MOCK_DATA) {
+            for (const req of rfp.requirements) {
+                if (req.resultType) {
+                    reqMap[req.id] = {
+                        resultType: req.resultType,
+                        metadata: req.metadata
+                    };
+                }
+            }
+        }
+        localStorage.setItem(RFP_STORAGE_KEY, JSON.stringify({
+            requirements: reqMap,
+            history: rfpState.history
+        }));
+    } catch (e) {
+        console.warn('[RFP] Failed to save to localStorage:', e);
+    }
+}
+
+// ─── Init ─────────────────────────────────────────────────
+function initRfp() {
+    rfpLoadFromStorage();
+    renderRfpTree();
+
+    // Tree search
+    const treeSearch = $('rfp-tree-search');
+    if (treeSearch) {
+        treeSearch.addEventListener('input', () => {
+            rfpState.treeSearchTerm = treeSearch.value.trim().toLowerCase();
+            renderRfpTree();
+        });
+    }
+
+    // Requirement search
+    const reqSearch = $('rfp-req-search');
+    if (reqSearch) {
+        reqSearch.addEventListener('input', () => {
+            rfpState.searchTerm = reqSearch.value.trim().toLowerCase();
+            renderRfpGrid();
+        });
+    }
+
+    // Result Type change handler
+    const resultType = $('rfp-result-type');
+    if (resultType) {
+        resultType.addEventListener('change', rfpOnResultTypeChange);
+    }
+
+    // PC Type change handler
+    const pcType = $('rfp-pc-type');
+    if (pcType) {
+        pcType.addEventListener('change', rfpOnPcTypeChange);
+    }
+
+    // Keyboard navigation on the grid body
+    const gridBody = $('rfp-grid-body');
+    if (gridBody) {
+        gridBody.setAttribute('tabindex', '0');
+        gridBody.addEventListener('keydown', rfpGridKeyHandler);
+    }
+}
+
+// ─── Tree Rendering ───────────────────────────────────────
+function renderRfpTree() {
+    const container = $('rfp-tree-container');
+    if (!container) return;
+
+    // Group by operator → year
+    const grouped = {};
+    for (const rfp of RFP_MOCK_DATA) {
+        // Tree search filter
+        if (rfpState.treeSearchTerm) {
+            const match = rfp.title.toLowerCase().includes(rfpState.treeSearchTerm) ||
+                rfp.operator.toLowerCase().includes(rfpState.treeSearchTerm);
+            if (!match) continue;
+        }
+        if (!grouped[rfp.operator]) grouped[rfp.operator] = {};
+        if (!grouped[rfp.operator][rfp.year]) grouped[rfp.operator][rfp.year] = [];
+        grouped[rfp.operator][rfp.year].push(rfp);
+    }
+
+    if (Object.keys(grouped).length === 0) {
+        container.innerHTML = '<div class="rfp-tree-empty">No RFPs found</div>';
+        return;
+    }
+
+    const chevronSvg = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>';
+
+    let html = '';
+    for (const [operator, years] of Object.entries(grouped)) {
+        html += `<div class="rfp-tree-operator">`;
+        html += `<div class="rfp-tree-operator-label" onclick="this.classList.toggle('collapsed'); this.nextElementSibling.classList.toggle('collapsed')">${chevronSvg} ${operator}</div>`;
+        html += `<div class="rfp-tree-children">`;
+
+        // Sort years descending
+        const sortedYears = Object.keys(years).sort((a, b) => b - a);
+        for (const year of sortedYears) {
+            html += `<div class="rfp-tree-year">`;
+            html += `<div class="rfp-tree-year-label" onclick="this.classList.toggle('collapsed'); this.nextElementSibling.classList.toggle('collapsed')">${chevronSvg} ${year}</div>`;
+            html += `<div class="rfp-tree-children">`;
+
+            for (const rfp of years[year]) {
+                const isActive = rfpState.selectedRfpId === rfp.id ? ' active' : '';
+                const escapedTitle = rfp.title.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                html += `<div class="rfp-tree-item${isActive}" data-tooltip="${rfp.title.replace(/"/g, '&quot;')}" onclick="rfpSelectRfp('${rfp.id}')">${rfp.title}</div>`;
+            }
+
+            html += `</div></div>`; // close year children + year
+        }
+
+        html += `</div></div>`; // close operator children + operator
+    }
+
+    container.innerHTML = html;
+}
+
+// ─── RFP Selection ────────────────────────────────────────
+function rfpSelectRfp(rfpId) {
+    rfpState.selectedRfpId = rfpId;
+    // Reset requirement selection & detail panel
+    rfpState.selectedReqId = null;
+    rfpShowDetailEmpty();
+
+    const rfp = RFP_MOCK_DATA.find(r => r.id === rfpId);
+    if (!rfp) return;
+
+    rfpState.requirements = rfp.requirements;
+
+    // Update grid title
+    const titleEl = $('rfp-grid-title');
+    if (titleEl) titleEl.textContent = rfp.title;
+
+    // Re-render tree to update active state
+    renderRfpTree();
+    renderRfpGrid();
+}
+
+// ─── Grid Rendering ───────────────────────────────────────
+function renderRfpGrid() {
+    const table = $('rfp-table');
+    const empty = $('rfp-grid-empty');
+    const tbody = $('rfp-table-body');
+    const countEl = $('rfp-grid-count');
+
+    if (!rfpState.requirements.length) {
+        if (table) table.classList.add('hidden');
+        if (empty) empty.classList.remove('hidden');
+        if (countEl) countEl.textContent = '';
+        return;
+    }
+
+    if (table) table.classList.remove('hidden');
+    if (empty) empty.classList.add('hidden');
+
+    // Filter by search term
+    let filtered = rfpState.requirements;
+    if (rfpState.searchTerm) {
+        filtered = rfpState.requirements.filter(r =>
+            r.requirement.toLowerCase().includes(rfpState.searchTerm) ||
+            r.jiraId.toLowerCase().includes(rfpState.searchTerm) ||
+            r.owner.toLowerCase().includes(rfpState.searchTerm)
+        );
+    }
+
+    if (countEl) countEl.textContent = `${filtered.length} items`;
+
+    if (!tbody) return;
+    tbody.innerHTML = filtered.map((req, i) => {
+        // Use ID-based matching for selection
+        const isSelected = rfpState.selectedReqId === req.id ? ' rfp-row-selected' : '';
+        const statusClass = req.resultType === 'PC' ? 'status-pc' : req.resultType === 'NC' ? 'status-nc' : 'status-none';
+        const statusLabel = req.resultType || '—';
+
+        return `<tr class="${isSelected}" data-req-id="${req.id}" onclick="rfpSelectReq('${req.id}')">
+            <td class="rfp-td-num">${i + 1}</td>
+            <td>${req.requirement}</td>
+            <td>${req.answer}</td>
+            <td>${req.owner}</td>
+            <td class="rfp-td-jira">${req.jiraId}</td>
+            <td style="text-align:center;"><span class="rfp-status-badge ${statusClass}">${statusLabel}</span></td>
+        </tr>`;
+    }).join('');
+}
+
+// ─── Requirement Selection ────────────────────────────────
+function rfpSelectReq(reqId) {
+    rfpState.selectedReqId = reqId;
+    renderRfpGrid(); // Re-render to update highlight
+    renderRfpDetail();
+
+    // Focus grid body for keyboard navigation
+    const gridBody = $('rfp-grid-body');
+    if (gridBody) gridBody.focus();
+}
+
+// ─── Detail Panel Rendering ───────────────────────────────
+function rfpShowDetailEmpty() {
+    const empty = $('rfp-detail-empty');
+    const content = $('rfp-detail-content');
+    if (empty) empty.classList.remove('hidden');
+    if (content) content.classList.add('hidden');
+}
+
+function renderRfpDetail() {
+    const req = rfpState.requirements.find(r => r.id === rfpState.selectedReqId);
+    if (!req) {
+        rfpShowDetailEmpty();
+        return;
+    }
+
+    const empty = $('rfp-detail-empty');
+    const content = $('rfp-detail-content');
+    if (empty) empty.classList.add('hidden');
+    if (content) content.classList.remove('hidden');
+
+    // Header
+    const jiraBadge = $('rfp-detail-jira');
+    const titleEl = $('rfp-detail-title');
+    if (jiraBadge) jiraBadge.textContent = req.jiraId;
+    if (titleEl) titleEl.textContent = req.requirement;
+
+    // Result Type
+    const resultType = $('rfp-result-type');
+    if (resultType) resultType.value = req.resultType || '';
+
+    // Reset conditional fields
+    rfpOnResultTypeChange();
+
+    // Populate saved metadata
+    if (req.metadata) {
+        if (req.resultType === 'PC') {
+            const pcType = $('rfp-pc-type');
+            if (pcType) pcType.value = req.metadata.pcType || '';
+            rfpOnPcTypeChange();
+            if (req.metadata.pcType === 'Planned Development') {
+                const schedule = $('rfp-planned-schedule');
+                if (schedule) schedule.value = req.metadata.plannedSchedule || '';
+            } else if (req.metadata.pcType === 'Partial Support') {
+                const supported = $('rfp-supported-scope');
+                const unsupported = $('rfp-unsupported-scope');
+                const reason = $('rfp-partial-reason');
+                if (supported) supported.value = req.metadata.supportedScope || '';
+                if (unsupported) unsupported.value = req.metadata.unsupportedScope || '';
+                if (reason) reason.value = req.metadata.partialReason || '';
+            }
+        } else if (req.resultType === 'NC') {
+            const ncReason = $('rfp-nc-reason');
+            if (ncReason) ncReason.value = req.metadata.ncReason || '';
+        }
+    }
+
+    // Comment
+    const comment = $('rfp-comment');
+    if (comment) comment.value = req.metadata?.comment || '';
+
+    // Render history
+    renderRfpTimeline(req.id);
+}
+
+// ─── Conditional Form Logic ───────────────────────────────
+function rfpOnResultTypeChange() {
+    const val = ($('rfp-result-type') || {}).value || '';
+    const pcFields = $('rfp-pc-fields');
+    const ncFields = $('rfp-nc-fields');
+
+    if (pcFields) pcFields.classList.toggle('hidden', val !== 'PC');
+    if (ncFields) ncFields.classList.toggle('hidden', val !== 'NC');
+
+    // Reset sub-fields when type changes
+    if (val !== 'PC') {
+        const pcType = $('rfp-pc-type');
+        if (pcType) pcType.value = '';
+        rfpOnPcTypeChange();
+    }
+    if (val !== 'NC') {
+        const ncReason = $('rfp-nc-reason');
+        if (ncReason) ncReason.value = '';
+    }
+}
+
+function rfpOnPcTypeChange() {
+    const val = ($('rfp-pc-type') || {}).value || '';
+    const planned = $('rfp-planned-dev');
+    const partial = $('rfp-partial-support');
+
+    if (planned) planned.classList.toggle('hidden', val !== 'Planned Development');
+    if (partial) partial.classList.toggle('hidden', val !== 'Partial Support');
+}
+
+// ─── Save Metadata ────────────────────────────────────────
+function rfpSaveMetadata() {
+    const req = rfpState.requirements.find(r => r.id === rfpState.selectedReqId);
+    if (!req) return;
+
+    const resultType = ($('rfp-result-type') || {}).value || '';
+    const comment = ($('rfp-comment') || {}).value || '';
+    const oldType = req.resultType;
+
+    req.resultType = resultType;
+    req.metadata = req.metadata || {};
+    req.metadata.comment = comment;
+
+    if (resultType === 'PC') {
+        const pcType = ($('rfp-pc-type') || {}).value || '';
+        req.metadata.pcType = pcType;
+        if (pcType === 'Planned Development') {
+            req.metadata.plannedSchedule = ($('rfp-planned-schedule') || {}).value || '';
+        } else if (pcType === 'Partial Support') {
+            req.metadata.supportedScope = ($('rfp-supported-scope') || {}).value || '';
+            req.metadata.unsupportedScope = ($('rfp-unsupported-scope') || {}).value || '';
+            req.metadata.partialReason = ($('rfp-partial-reason') || {}).value || '';
+        }
+    } else if (resultType === 'NC') {
+        req.metadata.ncReason = ($('rfp-nc-reason') || {}).value || '';
+    }
+
+    // Add to revision history
+    const action = oldType !== resultType
+        ? (resultType ? `Changed to ${resultType}` : 'Cleared result type')
+        : `Updated ${resultType || 'metadata'}`;
+
+    if (!rfpState.history[req.id]) rfpState.history[req.id] = [];
+    rfpState.history[req.id].unshift({
+        timestamp: new Date().toISOString(),
+        author: 'Current User',
+        action: action,
+        comment: comment || ''
+    });
+
+    // Persist to localStorage
+    rfpSaveToStorage();
+
+    // Re-render
+    renderRfpGrid();
+    renderRfpTimeline(req.id);
+
+    showToast('Metadata saved successfully', 'success');
+}
+
+// ─── Reset Form ───────────────────────────────────────────
+function rfpResetForm() {
+    const resultType = $('rfp-result-type');
+    if (resultType) resultType.value = '';
+    rfpOnResultTypeChange();
+
+    const comment = $('rfp-comment');
+    if (comment) comment.value = '';
+
+    const schedule = $('rfp-planned-schedule');
+    if (schedule) schedule.value = '';
+
+    const supported = $('rfp-supported-scope');
+    if (supported) supported.value = '';
+
+    const unsupported = $('rfp-unsupported-scope');
+    if (unsupported) unsupported.value = '';
+
+    showToast('Form reset', 'info');
+}
+
+// ─── Revision History Timeline ────────────────────────────
+function renderRfpTimeline(reqId) {
+    const timeline = $('rfp-timeline');
+    if (!timeline) return;
+
+    const entries = rfpState.history[reqId] || [];
+
+    if (!entries.length) {
+        timeline.innerHTML = '<div class="rfp-timeline-empty">No history yet</div>';
+        return;
+    }
+
+    timeline.innerHTML = entries.map(e => {
+        const date = new Date(e.timestamp);
+        const timeStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) +
+            ' ' + date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+        return `<div class="rfp-timeline-entry">
+            <div class="rfp-timeline-meta">
+                <span class="rfp-timeline-author">${e.author}</span>
+                <span>·</span>
+                <span>${timeStr}</span>
+            </div>
+            <div class="rfp-timeline-action">${e.action}</div>
+            ${e.comment ? `<div class="rfp-timeline-comment">${e.comment}</div>` : ''}
+        </div>`;
+    }).join('');
+}
+
+// ─── Keyboard Navigation ──────────────────────────────────
+function rfpGridKeyHandler(e) {
+    if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
+    e.preventDefault(); // Prevent browser from scrolling the page
+
+    // Get filtered list (same as rendered)
+    let filtered = rfpState.requirements;
+    if (rfpState.searchTerm) {
+        filtered = rfpState.requirements.filter(r =>
+            r.requirement.toLowerCase().includes(rfpState.searchTerm) ||
+            r.jiraId.toLowerCase().includes(rfpState.searchTerm) ||
+            r.owner.toLowerCase().includes(rfpState.searchTerm)
+        );
+    }
+
+    if (!filtered.length) return;
+
+    // Find current index by ID
+    const currentIdx = filtered.findIndex(r => r.id === rfpState.selectedReqId);
+    let newIdx;
+
+    if (e.key === 'ArrowDown') {
+        newIdx = currentIdx < filtered.length - 1 ? currentIdx + 1 : 0;
+    } else {
+        newIdx = currentIdx > 0 ? currentIdx - 1 : filtered.length - 1;
+    }
+
+    rfpSelectReq(filtered[newIdx].id);
+
+    // Scroll selected row into view
+    const selectedRow = document.querySelector(`tr[data-req-id="${filtered[newIdx].id}"]`);
+    if (selectedRow) {
+        selectedRow.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+}
+
+// ─── Jira Sync (Mock) ─────────────────────────────────────
+function rfpJiraSync() {
+    const btn = $('rfp-sync-btn');
+    const btnText = $('rfp-sync-btn-text');
+    if (!btn || btn.classList.contains('syncing')) return;
+
+    btn.classList.add('syncing');
+    btn.disabled = true;
+    if (btnText) btnText.textContent = 'Syncing...';
+
+    // Simulate API delay
+    setTimeout(() => {
+        btn.classList.remove('syncing');
+        btn.disabled = false;
+        if (btnText) btnText.textContent = 'Jira API Sync';
+
+        // Re-render the grid with current data
+        renderRfpGrid();
+        showToast('Jira sync completed — all requirements up to date', 'success');
+    }, 1500);
 }

@@ -174,7 +174,7 @@
                 </div>
 
                 <!-- RFP Management Card -->
-                <div class="s-dash-card s-dash-card--coming">
+                <div class="s-dash-card s-dash-card--active" onclick="navigateTo('rfp')">
                     <div class="s-dash-card-accent" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);">
                     </div>
                     <div class="s-dash-card-header">
@@ -184,20 +184,20 @@
                                     d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                             </svg>
                         </div>
-                        <span class="s-dash-badge s-dash-badge--coming">Coming Soon</span>
+                        <span class="s-dash-badge s-dash-badge--active">Active</span>
                     </div>
                     <h3 class="s-dash-card-title">RFP Management</h3>
-                    <p class="s-dash-card-desc">Automated RFP response generation and tracking with intelligent template
-                        matching.</p>
+                    <p class="s-dash-card-desc">NC/PC requirement classification, Jira sync, and revision history
+                        tracking for RFP responses.</p>
                     <div class="s-dash-card-footer">
                         <span class="s-dash-card-stat">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px;">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                             </svg>
-                            Q3 2026
+                            NC / PC Tracking
                         </span>
-                        <span class="s-dash-card-action s-dash-card-action--disabled">Coming Soon</span>
+                        <span class="s-dash-card-action">Open →</span>
                     </div>
                 </div>
 
@@ -566,27 +566,193 @@
     </div>
 
     <!-- ═══════════════════════════════════════════════════════
-         VIEW: RFP Management (Placeholder)
+         VIEW: RFP Management (3-Column Master-Detail)
          ═══════════════════════════════════════════════════════ -->
     <div id="view-rfp" class="s-view hidden">
-        <div class="s-placeholder-view">
-            <div class="s-placeholder-content">
-                <div class="s-placeholder-icon" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);">
+        <div class="rfp-wrapper">
+            <!-- ─── Column 1: RFP Navigator (260px) ─── -->
+            <aside class="rfp-nav" id="rfp-nav">
+                <div class="rfp-nav-header">
+                    <span class="rfp-nav-label">RFP Navigator</span>
+                </div>
+                <div class="rfp-nav-search">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                    </svg>
-                </div>
-                <h2 class="s-placeholder-title">RFP Management</h2>
-                <p class="s-placeholder-desc">Automated RFP response generation and intelligent template matching.</p>
-                <div class="s-placeholder-badge">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:16px;height:16px;">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
-                    Coming Soon — Estimated Q3 2026
+                    <input type="text" id="rfp-tree-search" placeholder="Search RFPs..." autocomplete="off">
                 </div>
-            </div>
+                <div class="rfp-tree-container" id="rfp-tree-container">
+                    <div class="rfp-tree-empty">Loading RFP data...</div>
+                </div>
+            </aside>
+
+            <!-- ─── Column 2: Requirement Master List (1fr) ─── -->
+            <section class="rfp-grid-section" id="rfp-grid-section">
+                <div class="rfp-grid-toolbar">
+                    <div class="rfp-grid-toolbar-left">
+                        <h3 class="rfp-grid-title" id="rfp-grid-title">Requirements</h3>
+                        <span class="rfp-grid-count" id="rfp-grid-count"></span>
+                    </div>
+                    <div class="rfp-grid-toolbar-right">
+                        <div class="rfp-search-wrapper">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                            <input type="text" id="rfp-req-search" placeholder="Filter requirements..."
+                                autocomplete="off">
+                        </div>
+                        <button class="s-btn s-btn-primary rfp-sync-btn" id="rfp-sync-btn" onclick="rfpJiraSync()">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                            <span id="rfp-sync-btn-text">Jira API Sync</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="rfp-grid-body" id="rfp-grid-body">
+                    <div class="rfp-grid-empty" id="rfp-grid-empty">
+                        <div class="s-guide-column">
+                            <div class="s-guide-icon-box"
+                                style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                </svg>
+                            </div>
+                            <p class="s-guide-text">Select an RFP from the Navigator</p>
+                            <p class="s-guide-desc">Choose an RFP to view its synced requirements</p>
+                        </div>
+                    </div>
+                    <table class="rfp-table hidden" id="rfp-table">
+                        <thead>
+                            <tr>
+                                <th class="rfp-th-num">#</th>
+                                <th class="rfp-th-req">Requirement</th>
+                                <th class="rfp-th-answer">Answer</th>
+                                <th class="rfp-th-owner">Owner</th>
+                                <th class="rfp-th-jira">Jira ID</th>
+                                <th class="rfp-th-status">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rfp-table-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ─── Column 3: NC/PC Detail Form (450px) ─── -->
+            <aside class="rfp-detail" id="rfp-detail">
+                <div class="rfp-detail-empty" id="rfp-detail-empty">
+                    <div class="s-guide-column">
+                        <div class="s-guide-icon-box">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                        </div>
+                        <p class="s-guide-text">Select a Requirement</p>
+                        <p class="s-guide-desc">Click a row in the Master List to manage its NC/PC metadata</p>
+                    </div>
+                </div>
+                <div class="rfp-detail-content hidden" id="rfp-detail-content">
+                    <div class="rfp-detail-scroll">
+                        <!-- Requirement Info Header -->
+                        <div class="rfp-detail-header">
+                            <span class="rfp-detail-badge" id="rfp-detail-jira"></span>
+                            <h4 class="rfp-detail-title" id="rfp-detail-title"></h4>
+                        </div>
+
+                        <!-- Metadata Form -->
+                        <div class="rfp-form-section">
+                            <label class="rfp-form-label">Result Type</label>
+                            <select class="rfp-form-select" id="rfp-result-type">
+                                <option value="">— Select —</option>
+                                <option value="PC">PC (Partially Compliant)</option>
+                                <option value="NC">NC (Non-Compliant)</option>
+                            </select>
+                        </div>
+
+                        <!-- PC Sub-fields -->
+                        <div class="rfp-form-section rfp-pc-fields hidden" id="rfp-pc-fields">
+                            <label class="rfp-form-label">PC Type</label>
+                            <select class="rfp-form-select" id="rfp-pc-type">
+                                <option value="">— Select —</option>
+                                <option value="Planned Development">Planned Development</option>
+                                <option value="Partial Support">Partial Support</option>
+                            </select>
+
+                            <!-- Planned Development sub-field -->
+                            <div class="rfp-form-sub hidden" id="rfp-planned-dev">
+                                <label class="rfp-form-label">Planned Release Schedule</label>
+                                <input type="text" class="rfp-form-input" id="rfp-planned-schedule"
+                                    placeholder="e.g., 2026 Q4 Release">
+                            </div>
+
+                            <!-- Partial Support sub-fields -->
+                            <div class="rfp-form-sub hidden" id="rfp-partial-support">
+                                <label class="rfp-form-label">Supported Scope</label>
+                                <textarea class="rfp-form-textarea" id="rfp-supported-scope"
+                                    placeholder="Describe the supported scope..."></textarea>
+                                <label class="rfp-form-label">Unsupported Scope</label>
+                                <textarea class="rfp-form-textarea" id="rfp-unsupported-scope"
+                                    placeholder="Describe the unsupported scope..."></textarea>
+                                <label class="rfp-form-label">Reason</label>
+                                <select class="rfp-form-select" id="rfp-partial-reason">
+                                    <option value="">— Select Reason —</option>
+                                    <option value="Technical Limitation">Technical Limitation</option>
+                                    <option value="Licensing Constraint">Licensing Constraint</option>
+                                    <option value="Architecture Gap">Architecture Gap</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- NC Sub-fields -->
+                        <div class="rfp-form-section rfp-nc-fields hidden" id="rfp-nc-fields">
+                            <label class="rfp-form-label">Type</label>
+                            <input type="text" class="rfp-form-input" value="Not Supported" disabled>
+                            <label class="rfp-form-label">Reason</label>
+                            <select class="rfp-form-select" id="rfp-nc-reason">
+                                <option value="">— Select Reason —</option>
+                                <option value="Alternative Support">Alternative Support</option>
+                                <option value="Pending Coordination">Pending Coordination</option>
+                                <option value="Out of Scope">Out of Scope</option>
+                                <option value="Future Roadmap">Future Roadmap</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <!-- Comment -->
+                        <div class="rfp-form-section">
+                            <label class="rfp-form-label">Comment</label>
+                            <textarea class="rfp-form-textarea" id="rfp-comment"
+                                placeholder="Add notes or justification..."></textarea>
+                        </div>
+
+                        <!-- Revision History -->
+                        <div class="rfp-history-section">
+                            <h5 class="rfp-history-title">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Revision History
+                            </h5>
+                            <div class="rfp-timeline" id="rfp-timeline">
+                                <div class="rfp-timeline-empty">No history yet</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sticky Action Bar -->
+                    <div class="rfp-detail-actions">
+                        <button class="s-btn s-btn-secondary" onclick="rfpResetForm()">Reset</button>
+                        <button class="s-btn s-btn-primary" id="rfp-save-btn" onclick="rfpSaveMetadata()">Save</button>
+                    </div>
+                </div>
+            </aside>
         </div>
     </div>
 
