@@ -2027,6 +2027,12 @@ function switchModuleTab(moduleName, subtabId, isRestore) {
     }
 }
 
+// Navigate to a module AND activate a specific sub-tab (for dashboard chip clicks)
+function navigateToSubTab(moduleName, subtabId) {
+    _moduleTabState[moduleName] = subtabId;
+    navigateTo(moduleName);
+}
+
 // ═══════════════════════════════════════════════════════════
 // RFP MANAGEMENT MODULE
 // ═══════════════════════════════════════════════════════════

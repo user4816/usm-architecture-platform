@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>USM AI Platform</title>
     <meta name="description"
-        content="Architecture Intelligence Platform — Knowledge-based Q&A, Requirements Management, Capacity Planning, and Data Analysis.">
+        content="Architecture Intelligence Platform ??Knowledge-based Q&A, Requirements Management, Capacity Planning, and Data Analysis.">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="icon" href="data:,">
@@ -15,7 +15,7 @@
 
 <body>
 
-    <!-- ═══ Platform Header ═══ -->
+    <!-- ?먥븧??Platform Header ?먥븧??-->
     <header class="s-header">
         <div class="s-header-left">
             <a href="#/" class="s-logo-link" id="logo-home-link" title="Go to Dashboard">
@@ -27,7 +27,7 @@
                 </div>
                 <div>
                     <div class="s-logo-title">USM AI Platform
-                        <span class="s-prototype-badge" title="Version 3.0.0 — Internal Beta Build">Beta</span>
+                        <span class="s-prototype-badge" title="Version 3.0.0 ??Internal Beta Build">Beta</span>
                     </div>
                     <div class="s-logo-subtitle">Architecture Intelligence</div>
                 </div>
@@ -88,7 +88,7 @@
         </div>
     </header>
 
-    <!-- ═══ Global Navigation Bar (GNB) ═══ -->
+    <!-- ?먥븧??Global Navigation Bar (GNB) ?먥븧??-->
     <nav class="s-gnb" id="global-nav">
         <div class="s-gnb-inner">
             <a href="#/" class="s-gnb-item" data-view="dashboard">
@@ -135,9 +135,9 @@
         </button>
     </nav>
 
-    <!-- ═══════════════════════════════════════════════════════
+    <!-- ?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧??
          VIEW: Dashboard (default)
-         ═══════════════════════════════════════════════════════ -->
+         ?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧??-->
     <div id="view-dashboard" class="s-view">
         <div class="s-dashboard">
             <div class="s-dashboard-header">
@@ -145,124 +145,187 @@
                 <p class="s-dashboard-desc">Manage all USM modules from a single unified interface.</p>
             </div>
             <div class="s-dashboard-grid">
-                <!-- Knowledge-based Q&A Card -->
-                <div class="s-dash-card s-dash-card--active" onclick="navigateTo('nbi')">
-                    <div class="s-dash-card-accent" style="background: linear-gradient(135deg, #2563EB, #3B82F6);">
-                    </div>
-                    <div class="s-dash-card-header">
-                        <div class="s-dash-card-icon" style="background: linear-gradient(135deg, #2563EB, #3B82F6);">
+
+                <!-- === Knowledge-based Q&A Section === -->
+                <div class="s-dash-section">
+                    <div class="s-dash-section-header" onclick="navigateTo('nbi')">
+                        <div class="s-dash-section-icon" style="background: linear-gradient(135deg, #2563EB, #3B82F6);">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
                         </div>
-                        <span class="s-dash-badge s-dash-badge--active">Active</span>
+                        <div class="s-dash-section-info">
+                            <div class="s-dash-section-title">Knowledge-based Q&A</div>
+                            <div class="s-dash-section-meta">7 sub-modules &#183; USM v1/v2 specification intelligence
+                            </div>
+                        </div>
+                        <span class="s-dash-section-badge s-dash-section-badge--active">Active</span>
+                        <svg class="s-dash-section-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
                     </div>
-                    <h3 class="s-dash-card-title">Knowledge-based Q&A</h3>
-                    <p class="s-dash-card-desc">NBI specification viewer with AI-powered assistant,
-                        FM/PM/CM knowledge base, and document comparison.</p>
-                    <div class="s-dash-card-footer">
-                        <span class="s-dash-card-stat">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px;">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                            </svg>
-                            USM v1 / v2
-                        </span>
-                        <span class="s-dash-card-action">Open →</span>
+                    <div class="s-dash-tiles">
+                        <div class="s-dash-tile s-dash-tile--active" onclick="navigateToSubTab('nbi','unified-tab')">
+                            <div class="s-dash-tile-emoji">&#x2728;</div>
+                            <div class="s-dash-tile-name">Architecture Insight</div>
+                            <div class="s-dash-tile-desc">Unified AI agent across all sub-modules</div>
+                            <span class="s-dash-tile-status s-dash-tile-status--planned">Planned</span>
+                        </div>
+                        <div class="s-dash-tile s-dash-tile--active" onclick="navigateToSubTab('nbi','nbi-tab')">
+                            <div class="s-dash-tile-emoji">&#x1F4C4;</div>
+                            <div class="s-dash-tile-name">NBI</div>
+                            <div class="s-dash-tile-desc">Northbound Interface spec viewer &amp; AI assistant</div>
+                            <span class="s-dash-tile-status s-dash-tile-status--active">Active</span>
+                        </div>
+                        <div class="s-dash-tile s-dash-tile--active" onclick="navigateToSubTab('nbi','son-tab')">
+                            <div class="s-dash-tile-emoji">&#x1F4E1;</div>
+                            <div class="s-dash-tile-name">SON</div>
+                            <div class="s-dash-tile-desc">Self-Organizing Network function reference</div>
+                            <span class="s-dash-tile-status s-dash-tile-status--planned">Planned</span>
+                        </div>
+                        <div class="s-dash-tile s-dash-tile--planned">
+                            <div class="s-dash-tile-emoji">&#x26A0;&#xFE0F;</div>
+                            <div class="s-dash-tile-name">FM</div>
+                            <div class="s-dash-tile-desc">Fault analysis &amp; alarm correlation</div>
+                            <span class="s-dash-tile-status s-dash-tile-status--planned">Planned</span>
+                        </div>
+                        <div class="s-dash-tile s-dash-tile--planned">
+                            <div class="s-dash-tile-emoji">&#x1F4CA;</div>
+                            <div class="s-dash-tile-name">PM</div>
+                            <div class="s-dash-tile-desc">KPI monitoring &amp; performance counters</div>
+                            <span class="s-dash-tile-status s-dash-tile-status--planned">Planned</span>
+                        </div>
+                        <div class="s-dash-tile s-dash-tile--planned">
+                            <div class="s-dash-tile-emoji">&#x2699;&#xFE0F;</div>
+                            <div class="s-dash-tile-name">CM</div>
+                            <div class="s-dash-tile-desc">Configuration parameter reference</div>
+                            <span class="s-dash-tile-status s-dash-tile-status--planned">Planned</span>
+                        </div>
+                        <div class="s-dash-tile s-dash-tile--planned">
+                            <div class="s-dash-tile-emoji">&#x1F310;</div>
+                            <div class="s-dash-tile-name">GM</div>
+                            <div class="s-dash-tile-desc">Generic management interface</div>
+                            <span class="s-dash-tile-status s-dash-tile-status--planned">Planned</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Requirements Management Card -->
-                <div class="s-dash-card s-dash-card--active" onclick="navigateTo('rfp')">
-                    <div class="s-dash-card-accent" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);">
-                    </div>
-                    <div class="s-dash-card-header">
-                        <div class="s-dash-card-icon" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);">
+                <!-- === Requirements Management Section === -->
+                <div class="s-dash-section">
+                    <div class="s-dash-section-header" onclick="navigateTo('rfp')">
+                        <div class="s-dash-section-icon" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                             </svg>
                         </div>
-                        <span class="s-dash-badge s-dash-badge--active">Active</span>
+                        <div class="s-dash-section-info">
+                            <div class="s-dash-section-title">Requirements Management</div>
+                            <div class="s-dash-section-meta">3 sub-modules &#183; NC/PC tracking &amp; Jira sync</div>
+                        </div>
+                        <span class="s-dash-section-badge s-dash-section-badge--active">Active</span>
+                        <svg class="s-dash-section-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
                     </div>
-                    <h3 class="s-dash-card-title">Requirements Management</h3>
-                    <p class="s-dash-card-desc">NC/PC requirement classification, RFP drafting, FRD tracking,
-                        and Jira sync for comprehensive requirements lifecycle.</p>
-                    <div class="s-dash-card-footer">
-                        <span class="s-dash-card-stat">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px;">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                            </svg>
-                            NC / PC Tracking
-                        </span>
-                        <span class="s-dash-card-action">Open →</span>
+                    <div class="s-dash-tiles">
+                        <div class="s-dash-tile s-dash-tile--active" onclick="navigateToSubTab('rfp','draft-tab')">
+                            <div class="s-dash-tile-emoji">&#x1F4DD;</div>
+                            <div class="s-dash-tile-name">RFP Draft</div>
+                            <div class="s-dash-tile-desc">Automated response drafting &amp; templates</div>
+                            <span class="s-dash-tile-status s-dash-tile-status--planned">Planned</span>
+                        </div>
+                        <div class="s-dash-tile s-dash-tile--active" onclick="navigateToSubTab('rfp','frd-tab')">
+                            <div class="s-dash-tile-emoji">&#x1F50D;</div>
+                            <div class="s-dash-tile-name">FRD Tracking</div>
+                            <div class="s-dash-tile-desc">Functional requirements traceability</div>
+                            <span class="s-dash-tile-status s-dash-tile-status--planned">Planned</span>
+                        </div>
+                        <div class="s-dash-tile s-dash-tile--active" onclick="navigateToSubTab('rfp','ncpc-tab')">
+                            <div class="s-dash-tile-emoji">&#x2705;</div>
+                            <div class="s-dash-tile-name">NC/PC Review</div>
+                            <div class="s-dash-tile-desc">Non-compliance &amp; partial compliance history</div>
+                            <span class="s-dash-tile-status s-dash-tile-status--active">Active</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Data Analysis Card -->
-                <div class="s-dash-card s-dash-card--coming">
-                    <div class="s-dash-card-accent" style="background: linear-gradient(135deg, #F59E0B, #FBBF24);">
-                    </div>
-                    <div class="s-dash-card-header">
-                        <div class="s-dash-card-icon" style="background: linear-gradient(135deg, #F59E0B, #FBBF24);">
+                <!-- === Data Analysis Section === -->
+                <div class="s-dash-section">
+                    <div class="s-dash-section-header" onclick="navigateTo('statistics')">
+                        <div class="s-dash-section-icon" style="background: linear-gradient(135deg, #F59E0B, #FBBF24);">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                             </svg>
                         </div>
-                        <span class="s-dash-badge s-dash-badge--coming">Planned</span>
+                        <div class="s-dash-section-info">
+                            <div class="s-dash-section-title">Data Analysis</div>
+                            <div class="s-dash-section-meta">3 sub-modules &#183; Analytics &amp; trend insights</div>
+                        </div>
+                        <span class="s-dash-section-badge s-dash-section-badge--planned">Planned</span>
+                        <svg class="s-dash-section-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
                     </div>
-                    <h3 class="s-dash-card-title">Data Analysis</h3>
-                    <p class="s-dash-card-desc">Comprehensive analytics with NE statistics, field data analysis,
-                        and performance trend insights.</p>
-                    <div class="s-dash-card-footer">
-                        <span class="s-dash-card-stat">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px;">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            Q4 2026
-                        </span>
-                        <span class="s-dash-card-action s-dash-card-action--disabled">Planned</span>
+                    <div class="s-dash-tiles">
+                        <div class="s-dash-tile s-dash-tile--planned">
+                            <div class="s-dash-tile-emoji">&#x1F4CA;</div>
+                            <div class="s-dash-tile-name">General Overview</div>
+                            <div class="s-dash-tile-desc">Usage metrics &amp; system analytics</div>
+                            <span class="s-dash-tile-status s-dash-tile-status--planned">Q4 2026</span>
+                        </div>
+                        <div class="s-dash-tile s-dash-tile--planned">
+                            <div class="s-dash-tile-emoji">&#x1F4C8;</div>
+                            <div class="s-dash-tile-name">NE Statistics</div>
+                            <div class="s-dash-tile-desc">Network Element health monitoring</div>
+                            <span class="s-dash-tile-status s-dash-tile-status--planned">Planned</span>
+                        </div>
+                        <div class="s-dash-tile s-dash-tile--planned">
+                            <div class="s-dash-tile-emoji">&#x1F310;</div>
+                            <div class="s-dash-tile-name">Field Data Analysis</div>
+                            <div class="s-dash-tile-desc">Real-world deployment optimization</div>
+                            <span class="s-dash-tile-status s-dash-tile-status--planned">Planned</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Capacity Planning Card -->
-                <div class="s-dash-card s-dash-card--coming">
-                    <div class="s-dash-card-accent" style="background: linear-gradient(135deg, #10B981, #34D399);">
-                    </div>
-                    <div class="s-dash-card-header">
-                        <div class="s-dash-card-icon" style="background: linear-gradient(135deg, #10B981, #34D399);">
+                <!-- === Capacity Planning Section === -->
+                <div class="s-dash-section">
+                    <div class="s-dash-section-header" onclick="navigateTo('dimensioning')">
+                        <div class="s-dash-section-icon" style="background: linear-gradient(135deg, #10B981, #34D399);">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                             </svg>
                         </div>
-                        <span class="s-dash-badge s-dash-badge--coming">Planned</span>
+                        <div class="s-dash-section-info">
+                            <div class="s-dash-section-title">Capacity Planning</div>
+                            <div class="s-dash-section-meta">1 sub-module &#183; Network dimensioning</div>
+                        </div>
+                        <span class="s-dash-section-badge s-dash-section-badge--planned">Planned</span>
+                        <svg class="s-dash-section-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
                     </div>
-                    <h3 class="s-dash-card-title">Capacity Planning</h3>
-                    <p class="s-dash-card-desc">Network capacity planning with automated dimensioning calculations and
-                        resource optimization.</p>
-                    <div class="s-dash-card-footer">
-                        <span class="s-dash-card-stat">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px;">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            Q3 2026
-                        </span>
-                        <span class="s-dash-card-action s-dash-card-action--disabled">Planned</span>
+                    <div class="s-dash-tiles">
+                        <div class="s-dash-tile s-dash-tile--planned">
+                            <div class="s-dash-tile-emoji">&#x1F9EE;</div>
+                            <div class="s-dash-tile-name">Auto-Dimensioning</div>
+                            <div class="s-dash-tile-desc">Automated capacity calculations &amp; optimization</div>
+                            <span class="s-dash-tile-status s-dash-tile-status--planned">Q3 2026</span>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
+    <!-- ?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧??
          VIEW: NBI Management (existing functionality)
-         ═══════════════════════════════════════════════════════ -->
+         ?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧??-->
     <div id="view-nbi" class="s-view hidden">
         <div class="s-module-container">
             <!-- Secondary Tab Bar -->
@@ -295,7 +358,7 @@
                             </svg>
                         </div>
                         <div class="s-subtab-placeholder-title">Unified Assistant</div>
-                        <p class="s-subtab-placeholder-desc">Global AI agent routing queries across all sub-modules —
+                        <p class="s-subtab-placeholder-desc">Global AI agent routing queries across all sub-modules ??
                             NBI, FM, PM, CM, GM, and SON.</p>
                         <span class="s-subtab-placeholder-badge">Planned</span>
                     </div>
@@ -408,19 +471,19 @@
                                     <div class="s-chat-suggestions">
                                         <button class="s-chat-suggestion" onclick="chatSuggest(this)"
                                             data-query="Summarize USMv1 26A Verizon changes">
-                                            <span class="action-icon">📋</span>
+                                            <span class="action-icon">?뱥</span>
                                             <span class="action-title">Summarize changes</span>
                                             <span class="action-desc">Compare version differences for a package</span>
                                         </button>
                                         <button class="s-chat-suggestion" onclick="chatSuggest(this)"
                                             data-query="Show USMv1 26B Verizon CM REST API specs">
-                                            <span class="action-icon">🔗</span>
+                                            <span class="action-icon">?뵕</span>
                                             <span class="action-title">REST API Specification</span>
                                             <span class="action-desc">View detailed API endpoints and parameters</span>
                                         </button>
                                         <button class="s-chat-suggestion" onclick="chatSuggest(this)"
                                             data-query="USMv1 26A Verizon and 26B Verizon differences">
-                                            <span class="action-icon">⚖️</span>
+                                            <span class="action-icon">?뽳툘</span>
                                             <span class="action-title">Compare packages</span>
                                             <span class="action-desc">Diff two package versions side by side</span>
                                         </button>
@@ -561,7 +624,7 @@
                                     </svg>
                                     <p class="s-upload-dropzone-text">Drag & drop files here or <span
                                             class="s-upload-browse">browse</span></p>
-                                    <p class="s-upload-dropzone-hint">.pdf, .docx — Maximum 5 files</p>
+                                    <p class="s-upload-dropzone-hint">.pdf, .docx ??Maximum 5 files</p>
                                     <input type="file" id="upload-file-input" multiple accept=".pdf,.docx,.doc"
                                         style="display:none;">
                                 </div>
@@ -697,9 +760,9 @@
         </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
+    <!-- ?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧??
          VIEW: RFP Management (3-Column Master-Detail)
-         ═══════════════════════════════════════════════════════ -->
+         ?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧??-->
     <div id="view-rfp" class="s-view hidden">
         <div class="s-module-container">
             <div class="s-module-tabs" data-module="rfp">
@@ -713,7 +776,7 @@
             </div>
             <div class="s-module-panel" id="rfp-panel-ncpc-tab" data-module="rfp">
                 <div class="rfp-wrapper">
-                    <!-- ─── Column 1: RFP Navigator (260px) ─── -->
+                    <!-- ??? Column 1: RFP Navigator (260px) ??? -->
                     <aside class="rfp-nav" id="rfp-nav">
                         <div class="rfp-nav-header">
                             <span class="rfp-nav-label">RFP Navigator</span>
@@ -730,7 +793,7 @@
                         </div>
                     </aside>
 
-                    <!-- ─── Column 2: Requirement Master List (1fr) ─── -->
+                    <!-- ??? Column 2: Requirement Master List (1fr) ??? -->
                     <section class="rfp-grid-section" id="rfp-grid-section">
                         <div class="rfp-grid-toolbar">
                             <div class="rfp-grid-toolbar-left">
@@ -786,7 +849,7 @@
                         </div>
                     </section>
 
-                    <!-- ─── Column 3: NC/PC Detail Form (450px) ─── -->
+                    <!-- ??? Column 3: NC/PC Detail Form (450px) ??? -->
                     <aside class="rfp-detail" id="rfp-detail">
                         <div class="rfp-detail-empty" id="rfp-detail-empty">
                             <div class="s-guide-column">
@@ -812,7 +875,7 @@
                                 <div class="rfp-form-section">
                                     <label class="rfp-form-label">Result Type</label>
                                     <select class="rfp-form-select" id="rfp-result-type">
-                                        <option value="">— Select —</option>
+                                        <option value="">??Select ??/option>
                                         <option value="PC">PC (Partially Compliant)</option>
                                         <option value="NC">NC (Non-Compliant)</option>
                                     </select>
@@ -822,7 +885,7 @@
                                 <div class="rfp-form-section rfp-pc-fields hidden" id="rfp-pc-fields">
                                     <label class="rfp-form-label">PC Type</label>
                                     <select class="rfp-form-select" id="rfp-pc-type">
-                                        <option value="">— Select —</option>
+                                        <option value="">??Select ??/option>
                                         <option value="Planned Development">Planned Development</option>
                                         <option value="Partial Support">Partial Support</option>
                                     </select>
@@ -844,7 +907,7 @@
                                             placeholder="Describe the unsupported scope..."></textarea>
                                         <label class="rfp-form-label">Reason</label>
                                         <select class="rfp-form-select" id="rfp-partial-reason">
-                                            <option value="">— Select Reason —</option>
+                                            <option value="">??Select Reason ??/option>
                                             <option value="Technical Limitation">Technical Limitation</option>
                                             <option value="Licensing Constraint">Licensing Constraint</option>
                                             <option value="Architecture Gap">Architecture Gap</option>
@@ -859,7 +922,7 @@
                                     <input type="text" class="rfp-form-input" value="Not Supported" disabled>
                                     <label class="rfp-form-label">Reason</label>
                                     <select class="rfp-form-select" id="rfp-nc-reason">
-                                        <option value="">— Select Reason —</option>
+                                        <option value="">??Select Reason ??/option>
                                         <option value="Alternative Support">Alternative Support</option>
                                         <option value="Pending Coordination">Pending Coordination</option>
                                         <option value="Out of Scope">Out of Scope</option>
@@ -935,9 +998,9 @@
         </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
+    <!-- ?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧??
          VIEW: Auto-Dimensioning (Placeholder)
-         ═══════════════════════════════════════════════════════ -->
+         ?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧??-->
     <div id="view-dimensioning" class="s-view hidden">
         <div class="s-module-container">
             <div class="s-module-tabs" data-module="dimensioning">
@@ -961,7 +1024,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            Coming Soon — Estimated Q3 2026
+                            Coming Soon ??Estimated Q3 2026
                         </div>
                     </div>
                 </div>
@@ -969,9 +1032,9 @@
         </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
+    <!-- ?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧??
          VIEW: Statistics (Placeholder)
-         ═══════════════════════════════════════════════════════ -->
+         ?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧?먥븧??-->
     <div id="view-statistics" class="s-view hidden">
         <div class="s-module-container">
             <div class="s-module-tabs" data-module="statistics">
