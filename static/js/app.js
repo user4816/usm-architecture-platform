@@ -1969,6 +1969,13 @@ function switchView(viewName) {
         }
     }
 
+    // NBI-specific: hide header actions unless we're in NBI with nbi-tab active
+    const nbiActions = $('nbi-header-actions');
+    if (nbiActions) {
+        const showNbiButtons = (viewName === 'nbi' && _moduleTabState.nbi === 'nbi-tab');
+        nbiActions.classList.toggle('hidden', !showNbiButtons);
+    }
+
     // Close mobile menu after navigation
     const gnbInner = document.querySelector('.s-gnb-inner');
     if (gnbInner) gnbInner.classList.remove('gnb-mobile-open');
